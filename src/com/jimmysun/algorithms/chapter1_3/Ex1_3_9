@@ -1,0 +1,32 @@
+public class Ex1_3_9 {
+    public static void main(String[] args) {
+        String value = "1+2)*3-4)*5-6)))";
+        System.out.println("对应的中缀表达式为： "  + infixExpression(value));
+    }
+    
+    private static boolean isOperator(char source) {
+        if (source == '+' || source == '-' || source == '*' || source == '/') {
+            return true;
+        }
+        return false;
+    }
+    
+    private static String infixExpression(String source) {
+        char[] sourceChar = source.toCharArray();
+        CStack<String> valueStack = new CStack<>();
+        CStack<String> operatorStack = new CStack<>();
+        for (char ch : sourceChar) {
+            if (Character.isDigit(ch)) {
+                valueStack.push(String.valueOf(ch));
+            } else if (isOperator(ch)) {
+                operatorStack.push(String.valueOf(ch));
+            } else if (ch == ')') {
+                String secondVa = valueStack.pop();
+                String firstVa = valueStack.pop();
+                String operator = operatorStack.pop();
+                valueStack.push(String.format("( %s %s %s )", firstVa, operator, secondVa));
+            }
+        }
+        return valueStack.peek();
+    }
+}
